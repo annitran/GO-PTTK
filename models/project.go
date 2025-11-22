@@ -51,6 +51,6 @@ type ProjectReview struct {
 	Reviewer  string    `json:"reviewer"`
 	Role      string    `json:"role"`
 	Comment   string    `json:"comment"`
-	Decision  string    `json:"decision"` // "approve", "revise", "reject"
+	Decision  string    `json:"decision"` // "approve", "revise", "reject",
 	CreatedAt time.Time `json:"created_at"`
 }
