@@ -9,5 +9,6 @@ import (
 func main() {
 	config.ConnectDB()
 	migrations.Migrate()
+	migrations.SeedAdmin(config.GetDB())
 	routes.SetupRouter().Run(":8080")
 }

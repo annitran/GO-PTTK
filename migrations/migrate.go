@@ -15,6 +15,7 @@ func Migrate() {
 		&models.ProjectMember{},
 		&models.ProjectAttachment{},
 		&models.ProjectReview{},
+		&models.Admin{},
 	)
 
 	if err != nil {
