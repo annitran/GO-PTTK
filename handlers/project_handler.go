@@ -88,6 +88,7 @@ func (h *projectHandler) SubmitProject(c *gin.Context) {
 	})
 }
 
+// Admin
 func (h *projectHandler) AdminGetProjects(c *gin.Context) {
 	projects, err := h.projectRepo.GetList()
 	if err != nil {

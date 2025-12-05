@@ -1,10 +1,11 @@
 package routes
 
-import "github.com/gin-contrib/cors"
-
 import (
 	"GO-PTTK/handlers"
+	"GO-PTTK/middlewares"
 	"GO-PTTK/repositories"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,13 +25,20 @@ func SetupRouter() *gin.Engine {
 		AllowCredentials: true,
 	}))
 
+	// User
 	projectHandler := handlers.NewProjectHandler(repositories.NewProjectRepository())
-
-	// USER SUBMIT PROJECT (không login)
 	router.POST("/api/v1/projects/submit", projectHandler.SubmitProject)
 
-	// STAFF (login)
-	router.GET("/api/v1/projects/admin", projectHandler.AdminGetProjects)
+	// Login
+	loginHandler := handlers.NewLoginHandler(repositories.NewAdminLogin())
+	router.POST("/api/v1/login", loginHandler.Login)
+
+	// Admin
+	adminRepo := repositories.NewAdminRepository()
+	auth := router.Group("/api/v1/admin", middlewares.AuthToken(adminRepo))
+	{
+		auth.GET("/projects", projectHandler.AdminGetProjects)
+	}
 
 	return router
 }
