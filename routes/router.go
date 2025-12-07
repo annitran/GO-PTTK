@@ -18,26 +18,27 @@ func SetupRouter() *gin.Engine {
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
 			"http://localhost:5173",
-			"http://localhost:5174",
 		},
-		AllowMethods:     []string{"GET", "POST"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
 
 	// User
 	projectHandler := handlers.NewProjectHandler(repositories.NewProjectRepository())
-	router.POST("/api/v1/projects/submit", projectHandler.SubmitProject)
+	router.POST("/api/v1/upload", projectHandler.SubmitProject)
 
 	// Login
 	loginHandler := handlers.NewLoginHandler(repositories.NewAdminLogin())
 	router.POST("/api/v1/login", loginHandler.Login)
 
-	// Admin
+	// Auth admin
 	adminRepo := repositories.NewAdminRepository()
 	auth := router.Group("/api/v1/admin", middlewares.AuthToken(adminRepo))
 	{
+		auth.GET("/me", handlers.GetAdmin)
 		auth.GET("/projects", projectHandler.AdminGetProjects)
+		auth.POST("/logout", handlers.Logout)
 	}
 
 	return router

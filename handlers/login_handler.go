@@ -48,6 +48,8 @@ func (h *loginHandler) Login(c *gin.Context) {
 		return
 	}
 
+	c.SetSameSite(http.SameSiteLaxMode)
+
 	c.SetCookie(
 		"token",
 		token,
@@ -55,7 +57,7 @@ func (h *loginHandler) Login(c *gin.Context) {
 		"/",
 		"",
 		false, // secure = false vì đang dev (true nếu chạy https)
-		true,
+		true,  // http
 	)
 
 	c.JSON(http.StatusOK, gin.H{
